@@ -8,6 +8,7 @@ import {
   FileText,
   DollarSign,
   Database,
+  BarChart2,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
@@ -32,6 +33,11 @@ const menuItems: MenuItem[] = [
       { title: 'Neraca', path: '/laporan/neraca' },
       { title: 'Laporan Aktivitas', path: '/laporan/aktivitas' },
       { title: 'Laporan Arus Kas', path: '/laporan/arus-kas' },
+      {
+        title: 'Budget vs Realisasi',
+        path: '/laporan/budget-realisasi',
+        icon: <BarChart2 className='h-5 w-5' />,
+      },
     ],
   },
   {
