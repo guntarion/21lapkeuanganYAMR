@@ -8,6 +8,47 @@ interface FormErrors {
   [key: string]: string;
 }
 
+// Data structures for Bidang and Unit
+const BIDANG = {
+  SK: 'KESEKRETARIATAN',
+  AG: 'KEAGAMAAN',
+  SO: 'SOSIAL',
+  KM: 'KEMANUSIAAN',
+} as const;
+
+const UNITS = {
+  SK: [
+    // KESEKRETARIATAN
+    { code: 'SEK', name: 'SEKRETARIAT' },
+    { code: 'MAI', name: 'TEKNIK MAINTENANCE' },
+    { code: 'MUT', name: 'PENJAMINAN MUTU' },
+    { code: 'SDM', name: 'PERSONALIA SDM' },
+    { code: 'KEA', name: 'KEBERSIHAN KEAMANAN' },
+    { code: 'HUM', name: 'KEHUMASAN' },
+    { code: 'DAN', name: 'USAHA DANA' },
+    { code: 'KED', name: 'KEDAI' },
+  ],
+  AG: [
+    // KEAGAMAAN
+    { code: 'TKM', name: 'KETAKMIRAN' },
+    { code: 'KID', name: 'REMASKIDZ' },
+    { code: 'TPQ', name: 'TPQ' },
+    { code: 'MUS', name: 'KEMUSLIMAHAN' },
+  ],
+  SO: [
+    // SOSIAL
+    { code: 'DCR', name: 'DAYCARE' },
+    { code: 'KBT', name: 'KBTK' },
+    { code: 'KOL', name: 'KOLAM RENANG' },
+  ],
+  KM: [
+    // KEMANUSIAAN
+    { code: 'LAZ', name: 'LAZ MUHAJIRIN' },
+    { code: 'AMB', name: 'AMBULANS' },
+    { code: 'JNZ', name: 'LAYANAN JENAZAH' },
+  ],
+} as const;
+
 const TransactionForm: React.FC<TransactionFormProps> = ({
   className = '',
 }) => {
@@ -25,8 +66,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   // Sample data structure for Program Kerja
   const programKerja = {
-    kesekretariatan: {
-      Sekretariat: [
+    SK: {
+      SEK: [
         { id: 1, name: 'Program Administrasi', budget: 1000000 },
         { id: 2, name: 'Program Pengembangan SDM', budget: 2000000 },
       ],
@@ -45,6 +86,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       { code: '5102', name: 'Biaya Program' },
       { code: '5103', name: 'Biaya Pegawai' },
     ],
+  };
+
+  const handleBidangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newBidang = e.target.value;
+    setBidang(newBidang);
+    setUnit(''); // Reset unit when bidang changes
   };
 
   const validateForm = () => {
@@ -117,31 +164,60 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         <div className='space-y-6'>
           {/* Transaction Type Selection */}
           <div className='space-y-2'>
-            <label
-              htmlFor='transactionType'
-              className='block text-sm font-medium text-gray-700'
-            >
+            <label className='block text-sm font-medium text-gray-700 mb-3'>
               Jenis Transaksi
             </label>
-            <div className='relative'>
-              <select
-                id='transactionType'
-                value={transactionType}
-                onChange={(e) => setTransactionType(e.target.value)}
-                className='block w-full p-2.5 bg-white border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+            <div className='flex space-x-6'>
+              <label
+                className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
+                  transactionType === 'income'
+                    ? 'bg-blue-50 border-blue-500 text-blue-600'
+                    : 'bg-white border-gray-200 text-gray-700'
+                }`}
               >
-                <option value='income'>Pemasukan</option>
-                <option value='expense'>Pengeluaran</option>
-              </select>
-              <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
-                <svg
-                  className='fill-current h-4 w-4'
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox='0 0 20 20'
+                <input
+                  type='radio'
+                  className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
+                  name='transactionType'
+                  value='income'
+                  checked={transactionType === 'income'}
+                  onChange={(e) => setTransactionType(e.target.value)}
+                />
+                <span
+                  className={`ml-2 font-medium ${
+                    transactionType === 'income'
+                      ? 'text-blue-600'
+                      : 'text-gray-700'
+                  }`}
                 >
-                  <path d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' />
-                </svg>
-              </div>
+                  Pemasukan
+                </span>
+              </label>
+              <label
+                className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
+                  transactionType === 'expense'
+                    ? 'bg-blue-50 border-blue-500 text-blue-600'
+                    : 'bg-white border-gray-200 text-gray-700'
+                }`}
+              >
+                <input
+                  type='radio'
+                  className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
+                  name='transactionType'
+                  value='expense'
+                  checked={transactionType === 'expense'}
+                  onChange={(e) => setTransactionType(e.target.value)}
+                />
+                <span
+                  className={`ml-2 font-medium ${
+                    transactionType === 'expense'
+                      ? 'text-blue-600'
+                      : 'text-gray-700'
+                  }`}
+                >
+                  Pengeluaran
+                </span>
+              </label>
             </div>
           </div>
 
@@ -158,16 +234,17 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 <select
                   id='bidang'
                   value={bidang}
-                  onChange={(e) => setBidang(e.target.value)}
+                  onChange={handleBidangChange}
                   className={`block w-full p-2.5 bg-white border rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.bidang ? 'border-red-500' : 'border-gray-300'
                   }`}
                 >
                   <option value=''>Pilih bidang</option>
-                  <option value='kesekretariatan'>Kesekretariatan</option>
-                  <option value='keagamaan'>Keagamaan</option>
-                  <option value='sosial'>Sosial</option>
-                  <option value='kemanusiaan'>Kemanusiaan</option>
+                  {Object.entries(BIDANG).map(([code, name]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
                 </select>
                 <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
                   <svg
@@ -199,14 +276,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                   className={`block w-full p-2.5 bg-white border rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.unit ? 'border-red-500' : 'border-gray-300'
                   }`}
+                  disabled={!bidang}
                 >
                   <option value=''>Pilih unit</option>
-                  {bidang === 'kesekretariatan' && (
-                    <>
-                      <option value='sekretariat'>Sekretariat</option>
-                      <option value='teknik'>Teknik Maintenance</option>
-                    </>
-                  )}
+                  {bidang &&
+                    UNITS[bidang as keyof typeof UNITS]?.map((unit) => (
+                      <option key={unit.code} value={unit.code}>
+                        {unit.name}
+                      </option>
+                    ))}
                 </select>
                 <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
                   <svg
@@ -255,6 +333,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
                 <select
                   id='program'
                   className='block w-full p-2.5 bg-white border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  disabled={!bidang || !unit}
                 >
                   <option value=''>Pilih program</option>
                   {programKerja[bidang as keyof typeof programKerja]?.[
