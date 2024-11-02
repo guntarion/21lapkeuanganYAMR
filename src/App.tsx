@@ -8,6 +8,7 @@ import DaftarAkunPage from './components/pages/DaftarAkunPage';
 import ProgramPage from './components/pages/ProgramPage';
 import BudgetRealizationPage from './components/pages/BudgetRealizationPage';
 import BudgetProgramDetailPage from './components/pages/BudgetProgramDetailPage';
+import TransactionForm from './components/forms/TransactionForm';
 
 function App() {
   return (
@@ -27,6 +28,15 @@ function App() {
           <Route
             path='/laporan/budget-realisasi/:id'
             element={<BudgetProgramDetailPage />}
+          />
+          <Route path='/input/transaksi' element={<TransactionForm />} />
+          <Route
+            path='/input/pemasukan'
+            element={<TransactionForm type='pemasukan' />}
+          />
+          <Route
+            path='/input/pengeluaran'
+            element={<TransactionForm type='pengeluaran' />}
           />
         </Routes>
       </Layout>

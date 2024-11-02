@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface TransactionFormProps {
   className?: string;
+  type?: 'pemasukan' | 'pengeluaran';
 }
 
 interface FormErrors {
@@ -51,8 +53,16 @@ const UNITS = {
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
   className = '',
+  type,
 }) => {
-  const [transactionType, setTransactionType] = useState('income');
+  const location = useLocation();
+  const [transactionType, setTransactionType] = useState(
+    type === 'pemasukan'
+      ? 'income'
+      : type === 'pengeluaran'
+      ? 'expense'
+      : 'income'
+  );
   const [bidang, setBidang] = useState('');
   const [unit, setUnit] = useState('');
   const [isPlannedProgram, setIsPlannedProgram] = useState(true);
@@ -63,6 +73,15 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // Set the transaction type based on the route
+  useEffect(() => {
+    if (location.pathname === '/input/pemasukan') {
+      setTransactionType('income');
+    } else if (location.pathname === '/input/pengeluaran') {
+      setTransactionType('expense');
+    }
+  }, [location.pathname]);
 
   // Sample data structure for Program Kerja
   const programKerja = {
@@ -149,10 +168,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
     }
   };
 
+  // Get the page title based on the route
+  const getPageTitle = () => {
+    if (location.pathname === '/input/pemasukan') {
+      return 'Input Pemasukan';
+    } else if (location.pathname === '/input/pengeluaran') {
+      return 'Input Pengeluaran';
+    }
+    return 'Input Transaksi';
+  };
+
   return (
     <div className='p-6 bg-white'>
       <h1 className='text-2xl font-semibold text-gray-900 mb-6'>
-        Input Transaksi
+        {getPageTitle()}
       </h1>
       <form onSubmit={handleSubmit} className={`w-full max-w-3xl ${className}`}>
         {submitSuccess && (
@@ -162,65 +191,68 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         )}
 
         <div className='space-y-6'>
-          {/* Transaction Type Selection */}
-          <div className='space-y-2'>
-            <label className='block text-sm font-medium text-gray-700 mb-3'>
-              Jenis Transaksi
-            </label>
-            <div className='flex space-x-6'>
-              <label
-                className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
-                  transactionType === 'income'
-                    ? 'bg-blue-50 border-blue-500 text-blue-600'
-                    : 'bg-white border-gray-200 text-gray-700'
-                }`}
-              >
-                <input
-                  type='radio'
-                  className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
-                  name='transactionType'
-                  value='income'
-                  checked={transactionType === 'income'}
-                  onChange={(e) => setTransactionType(e.target.value)}
-                />
-                <span
-                  className={`ml-2 font-medium ${
+          {/* Transaction Type Selection - Only show if not on a specific route */}
+          {!type && (
+            <div className='space-y-2'>
+              <label className='block text-sm font-medium text-gray-700 mb-3'>
+                Jenis Transaksi
+              </label>
+              <div className='flex space-x-6'>
+                <label
+                  className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
                     transactionType === 'income'
-                      ? 'text-blue-600'
-                      : 'text-gray-700'
+                      ? 'bg-blue-50 border-blue-500 text-blue-600'
+                      : 'bg-white border-gray-200 text-gray-700'
                   }`}
                 >
-                  Pemasukan
-                </span>
-              </label>
-              <label
-                className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
-                  transactionType === 'expense'
-                    ? 'bg-blue-50 border-blue-500 text-blue-600'
-                    : 'bg-white border-gray-200 text-gray-700'
-                }`}
-              >
-                <input
-                  type='radio'
-                  className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
-                  name='transactionType'
-                  value='expense'
-                  checked={transactionType === 'expense'}
-                  onChange={(e) => setTransactionType(e.target.value)}
-                />
-                <span
-                  className={`ml-2 font-medium ${
+                  <input
+                    type='radio'
+                    className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
+                    name='transactionType'
+                    value='income'
+                    checked={transactionType === 'income'}
+                    onChange={(e) => setTransactionType(e.target.value)}
+                  />
+                  <span
+                    className={`ml-2 font-medium ${
+                      transactionType === 'income'
+                        ? 'text-blue-600'
+                        : 'text-gray-700'
+                    }`}
+                  >
+                    Pemasukan
+                  </span>
+                </label>
+                <label
+                  className={`inline-flex items-center px-4 py-2 rounded-lg border cursor-pointer hover:bg-gray-50 ${
                     transactionType === 'expense'
-                      ? 'text-blue-600'
-                      : 'text-gray-700'
+                      ? 'bg-blue-50 border-blue-500 text-blue-600'
+                      : 'bg-white border-gray-200 text-gray-700'
                   }`}
                 >
-                  Pengeluaran
-                </span>
-              </label>
+                  <input
+                    type='radio'
+                    className='w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500'
+                    name='transactionType'
+                    value='expense'
+                    checked={transactionType === 'expense'}
+                    onChange={(e) => setTransactionType(e.target.value)}
+                  />
+                  <span
+                    className={`ml-2 font-medium ${
+                      transactionType === 'expense'
+                        ? 'text-blue-600'
+                        : 'text-gray-700'
+                    }`}
+                  >
+                    Pengeluaran
+                  </span>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
 
+          {/* Rest of the form remains unchanged */}
           {/* Bidang and Unit Selection */}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div className='space-y-2'>
