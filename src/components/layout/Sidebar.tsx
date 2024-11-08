@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Menu,
+  Activity,
   ChevronDown,
   ChevronRight,
   LayoutDashboard,
@@ -52,7 +53,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: 'Tracking Monitoring',
-    icon: <Database className='h-5 w-5' />,
+    icon: <Activity className='h-5 w-5' />,
     path: '/monitoring',
     submenu: [
       { title: 'Kabar', path: '/monitoring/kabar' },

@@ -11,6 +11,7 @@ import BudgetProgramDetailPage from './components/pages/BudgetProgramDetailPage'
 import TransactionForm from './components/forms/TransactionForm';
 import ProgramMonitoringPage from './components/pages/ProgramMonitoringPage';
 import ProgramEvaluationForm from './components/forms/ProgramEvaluationForm';
+import MonitoringKabarPage from './components/pages/MonitoringKabarPage';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             path='/monitoring/program/evaluate/:id'
             element={<ProgramEvaluationForm />}
           />
+          <Route path='/monitoring/kabar' element={<MonitoringKabarPage />} />
         </Routes>
       </Layout>
     </Router>
