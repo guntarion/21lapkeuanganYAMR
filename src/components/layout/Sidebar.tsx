@@ -51,6 +51,15 @@ const menuItems: MenuItem[] = [
     ],
   },
   {
+    title: 'Tracking Monitoring',
+    icon: <Database className='h-5 w-5' />,
+    path: '/monitoring',
+    submenu: [
+      { title: 'Kabar', path: '/monitoring/kabar' },
+      { title: 'Program', path: '/monitoring/program' },
+    ],
+  },
+  {
     title: 'Master Data',
     icon: <Database className='h-5 w-5' />,
     path: '/master',

@@ -9,6 +9,8 @@ import ProgramPage from './components/pages/ProgramPage';
 import BudgetRealizationPage from './components/pages/BudgetRealizationPage';
 import BudgetProgramDetailPage from './components/pages/BudgetProgramDetailPage';
 import TransactionForm from './components/forms/TransactionForm';
+import ProgramMonitoringPage from './components/pages/ProgramMonitoringPage';
+import ProgramEvaluationForm from './components/forms/ProgramEvaluationForm';
 
 function App() {
   return (
@@ -37,6 +39,14 @@ function App() {
           <Route
             path='/input/pengeluaran'
             element={<TransactionForm type='pengeluaran' />}
+          />
+          <Route
+            path='/monitoring/program'
+            element={<ProgramMonitoringPage />}
+          />
+          <Route
+            path='/monitoring/program/evaluate/:id'
+            element={<ProgramEvaluationForm />}
           />
         </Routes>
       </Layout>
